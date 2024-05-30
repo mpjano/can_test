@@ -24,8 +24,6 @@ busybox --install -s rootfs
 dd if=/dev/zero of=$FILESYSTEM bs=1M count=100
 mkfs.ext2 $FILESYSTEM
 
-
-
 mkdir -p mnt
 sudo mount -o loop $FILESYSTEM mnt
 sudo cp -R rootfs/* mnt/
@@ -41,4 +39,4 @@ if [ ! -f "$FILESYSTEM" ]; then
     exit 1
 fi
 
-sudo qemu-system-x86_64 -kernel /boot/vmlinuz-$(uname -r) -m 1024 -append "root=/dev/sda init=/init console=ttyS0 nokaslr" -nographic -drive file=rootfs.img,format=raw
+sudo qemu-system-x86_64 -kernel "$KERNEL" -m 1024 -append "root=/dev/sda init=/init console=ttyS0 nokaslr" -nographic -drive file="$FILESYSTEM",format=raw
